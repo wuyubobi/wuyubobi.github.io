@@ -1,0 +1,103 @@
+# Site settings
+title: ZB Blog
+SEOTitle: 张博的博客 | ZB Blog
+header-img: img/home-bg.jpg
+email: wuyubobi@126.com
+description: "Android开发 | wuyubobi，Android工程师，开发，数据，Java，旅游| 这里是 @wuyubobi 的个人博客，努力成为一个大牛。"
+keyword: "Android, 开发, wuyubobi, 张博的博客, 个人网站, 互联网, 前端, Java"
+url: "http://wuyubobi.com"              # your host, for absolute URL
+baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
+
+
+
+# add sreach
+search: true
+
+# SNS settings
+RSS: true
+weibo_username: wuyubobi
+# instagram_username: wuyubobi
+#jianshu_username: wuyubobi
+# linkedin_username: wuyubobi
+#zhihu_username: wuyuboi
+#github_username: wuyubobi
+#twitter_username: wuyubobi
+#facebook_username: wuyubobi
+#lofter_username: wuyubobi
+
+
+
+# Build settings
+# from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
+highlighter: rouge
+permalink: pretty
+paginate: 10
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","README.zh.md"]
+anchorjs: true                          # if you want to customize anchor. check out line:181 of `post.html`
+
+
+
+# Gems
+# from PR#40, to support local preview for Jekyll 3.0
+gems: [jekyll-paginate]
+
+
+
+# Markdown settings
+# replace redcarpet to kramdown,
+# although redcarpet can auto highlight code, the lack of header-id make the catalog impossible, so I switch to kramdown
+# document: http://jekyllrb.com/docs/configuration/#kramdown
+markdown: kramdown
+kramdown:
+  input: GFM                            # use Github Flavored Markdown !important
+
+
+
+# Disqus settings
+#disqus_username: _your_disqus_short_name_
+
+# Duoshuo settings
+#duoshuo_username: wuyubobi
+# Share component is depend on Comment so we can NOT use share only.
+#duoshuo_share: true                     # set to false if you want to use Comment without Sharing
+
+
+
+
+# Analytics settings
+# Baidu Analytics 
+# ba_track_id: de1ce458db68d7a3d74998a4cc6e6c4f
+
+# Google Analytics
+# ga_track_id: 'UA-79793350-1'            # Format: UA-xxxxxx-xx
+# ga_domain: wuyubobi
+
+
+
+# Sidebar settings
+sidebar: true                           # whether or not using Sidebar.
+sidebar-about-description: "Keep Moving"
+sidebar-avatar: /img/avatar-zb.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+
+
+
+# Featured Tags
+featured-tags: true                     # whether or not using featured-tags
+featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
+
+
+
+# Progressive Web Apps
+chrome-tab-theme-color: "#000000"
+service-worker: true
+
+
+
+# Friends
+friends: [    
+    # {   
+    #     title: "姓名“,   
+    #     href: "链接"    
+    # }
+]
+
