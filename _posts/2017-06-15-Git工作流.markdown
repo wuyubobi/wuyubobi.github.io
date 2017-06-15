@@ -1,0 +1,107 @@
+---
+layout:     post
+title:      "GitFlow工作流"
+subtitle:   "一个健壮的用于管理大型项目的框架"
+date:       2017-06-15
+author:     "ZhangBo"
+header-img: "img/post-bg-digital-native.jpg"
+catalog: true
+tags:
+- Git
+- GitFlow
+- 项目管理
+- 代码管理
+---
+### Git Flow 的安装
+- OSX  --->  brew install git-flow
+- Linux ---> apt-get install git-flow
+- Windows ---> [Window安装Git Flow](https://github.com/nvie/gitflow/wiki/Windows)
+
+*Git Flow的使用方式*
+
+![](http://op0s30etn.bkt.clouddn.com/o_git-flow-commands.png)
+### GitFlow的工作方式
+
+  ![](http://op0s30etn.bkt.clouddn.com/git-workflow-release-cycle-4maintenance.png)
+
+1. **Feature分支** 
+   功能分支，每一个新功能都位与一个独立分支，功能分支是使用develop分支作为父分支，新功能完成时，合并会develop分支，不予master分支交互。
+2. **Master分支** 
+   这个分支最近发布到生产环境的代码，最近发布的Release， 这个分支只能从其他分支合并，不能在这个分支直接修改。
+3. **Develop分支** 
+   这个分支是我们是我们的主开发分支，包含所有要发布到下一个Release的代码，这个主要合并与其他分支，比如Feature分支
+4. **Release分支**
+   当你需要一个发布一个新Release的时候，我们基于Develop分支创建一个Release分支，完成Release后，我们合并到Master和Develop分支。
+5. **Hotfix分支**
+   当我们在Master发现新的Bug时候，我们需要创建一个Hotfix, 完成Hotfix后，我们合并回Master和Develop分支，所以Hotfix的改动会进入下一个Release
+
+----
+
+*创建develop分支：*
+- git branch develop （创建分支）
+- git push -u origin develop （将分支提交到远程仓库）
+- git clone ...(仓库地址) 
+- git checkout -b develop origin/develop （切换到develop分支）
+
+----
+
+*开发新功能*
+- git checkout -b some-feature（新功能分支名） develop (基于develop分支创建并切换到该分支）
+- git status （查看变化）
+- git add .  （添加）
+- git commit -m ''  （提交）
+
+> git flow feature（默认创建的新功能分支名）start  some-feature（新功能分支名）使用git flow 快速完成操作
+> git flow feature publish some-feature 推到远端服务器
+> git flow feature pull origin some-feature 取到其他客户发布的新特性分支
+
+----
+
+*完成新功能*
+- git pull origin develop （拉远程develop代码）
+- git checkout develop  （切换到develop分支）
+- git merge some-feature （将新功能和develop分支进行合并）
+- git push（提交到远程服务器）
+- git branch -d some-feature （删掉了新工能的分支）
+
+> git flow feature finish some-feature
+
+----
+
+*准备发布*
+- git checkout -b release-v1.0.0（准备发布的版本） develop
+- git flow release start  release-v1.0.0 （从develop分支中开始创建master）
+
+> git flow release publish release-v1.0.0 （推到远端服务器）
+
+----
+
+*完成release版本*
+- git checkout master （切换分支）
+- git merge release-v1.0.0 （合并发布的release-v1.0.0版本）
+- git push （提交远端）
+- git checkout develop （切换develop分支）
+- git merge release-v1.0.0（合并发布的release-v1.0.0版本）
+- git push （提交远端）
+- git branch -d release-v1.0.0 （删除release分支）
+- git tag -a v1.0.0 -m "" master （打tag）
+- git push --tags （提交tag）
+
+> git flow release finish release-v1.0.0
+
+----
+
+*修复线上bug*
+- git checkout -b issue-#001 master （基于master创建修复分支）
+- Fix the bug （修复bug）
+- git checkout master （切换master分支）
+- git merge issue-#001 （合并修复）
+- git push （提交）
+- git checkout develop （切换develop分支）
+- git merge issue-#001 （合并修复）
+- git push （提交）
+- git branch -d issue-#001 （删除修复分支）
+
+> git flow hotfix start VERSION [BASENAME] VERSION 参数标记着修正版本。你可以从 [BASENAME]开始，[BASENAME]为finish release时填写的版本号
+> git flow hotfix finish VERSION
+
