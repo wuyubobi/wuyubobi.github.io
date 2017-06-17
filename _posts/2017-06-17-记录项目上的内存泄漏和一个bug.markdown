@@ -1,0 +1,69 @@
+---
+layout:     post
+title:      "记项目上的两个内存泄漏修复"
+subtitle:   "项目Bug随手记录"
+date:       2017-06-17
+author:     "ZhangBo"
+header-img: "img/post-bg-android.jpg"
+catalog: true
+tags:
+- Bug
+- 内存泄漏
+- AudioManager
+- jiecaovideo
+---
+项目上需要视频播放功能，项目周期很短，接入了很多现成的库，发现几处Bug，记录一下解决方式。
+1. 内存泄漏（TextureView）
+
+   ![](http://op0s30etn.bkt.clouddn.com/jiecaoleak.png)
+   Activity中使用jiecao播放器时，产生了如图所示的内存泄漏。
+
+   ​
+
+   *解决方式：*
+
+   在调用JCVideoPlayer.releaseAllVideos();之前将JCMediaManager.textureView = null;解除对Acitvity的引用。
+
+   ​
+
+2. 内存泄漏（AudioManager）
+
+   ​
+
+   解决上一个内存泄漏以后，又出现内存泄漏问题，提示是AudioManager类出现的， 后面百思不得其解，因为代码中Context没有被长生命周期的所引用，为什么还会出现泄漏呢？后面通过google才发现原来是setVideoPath()导致的，VideoView内部的AudioManager会对Activity持有一个强引用，而AudioManager的生命周期比较长，导致这个Activity始终无法被回收。
+
+   ​
+
+   *解决方式：*
+
+   ```
+    @Override
+    protected void attachBaseContext(Context newBase) {
+     	 super.attachBaseContext(new ContextWrapper(newBase) {
+       		@Override
+       		public Object getSystemService(String name) {
+           		if (Context.AUDIO_SERVICE.equals(name))
+               		return getApplicationContext().getSystemService(name);
+           		return super.getSystemService(name);
+       		}
+      	});
+    }
+   ```
+   ​
+
+3. jiecaovideo在viewpager搭配Fragment组合中，会产生
+
+
+   ```
+      java.lang.NullPointerException: 
+          Attempt to invoke virtual method 
+          'void android.view.View.unFocus(android.view.View)' 
+          on a null object reference
+   ```
+   在onPause方法中调用产生，可能是由于栈管理出现问题导致，暂记下，未深层追究原因。
+
+	​
+
+   *解决方式：*
+
+   不使用Fragment，换用自定义ViewGroup继承JCVideoPlayerStandard的方式或者完全	自定义VidewGroup进行视频播放展示，截止到目前一切正常。

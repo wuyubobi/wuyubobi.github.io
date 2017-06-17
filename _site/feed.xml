@@ -5,9 +5,87 @@
     <description>Android开发 | wuyubobi，Android工程师，开发，数据，Java，旅游| 这里是 @wuyubobi 的个人博客，努力成为一个大牛。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 16 Jun 2017 00:09:10 +0800</pubDate>
-    <lastBuildDate>Fri, 16 Jun 2017 00:09:10 +0800</lastBuildDate>
+    <pubDate>Sat, 17 Jun 2017 12:48:29 +0800</pubDate>
+    <lastBuildDate>Sat, 17 Jun 2017 12:48:29 +0800</lastBuildDate>
     <generator>Jekyll v3.4.3</generator>
+    
+      <item>
+        <title>记项目上的两个内存泄漏修复</title>
+        <description>&lt;p&gt;项目上需要视频播放功能，项目周期很短，接入了很多现成的库，发现几处Bug，记录一下解决方式。&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;内存泄漏（TextureView）&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;http://op0s30etn.bkt.clouddn.com/jiecaoleak.png&quot; alt=&quot;&quot; /&gt;
+Activity中使用jiecao播放器时，产生了如图所示的内存泄漏。&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+
+    &lt;p&gt;&lt;em&gt;解决方式：&lt;/em&gt;&lt;/p&gt;
+
+    &lt;p&gt;在调用JCVideoPlayer.releaseAllVideos();之前将JCMediaManager.textureView = null;解除对Acitvity的引用。&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;内存泄漏（AudioManager）&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+
+    &lt;p&gt;解决上一个内存泄漏以后，又出现内存泄漏问题，提示是AudioManager类出现的， 后面百思不得其解，因为代码中Context没有被长生命周期的所引用，为什么还会出现泄漏呢？后面通过google才发现原来是setVideoPath()导致的，VideoView内部的AudioManager会对Activity持有一个强引用，而AudioManager的生命周期比较长，导致这个Activity始终无法被回收。&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+
+    &lt;p&gt;&lt;em&gt;解决方式：&lt;/em&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; @Override
+ protected void attachBaseContext(Context newBase) {
+  	 super.attachBaseContext(new ContextWrapper(newBase) {
+    		@Override
+    		public Object getSystemService(String name) {
+        		if (Context.AUDIO_SERVICE.equals(name))
+            		return getApplicationContext().getSystemService(name);
+        		return super.getSystemService(name);
+    		}
+   	});
+ }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;​&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jiecaovideo在viewpager搭配Fragment组合中，会产生&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   java.lang.NullPointerException: 
+       Attempt to invoke virtual method 
+       'void android.view.View.unFocus(android.view.View)' 
+       on a null object reference
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;在onPause方法中调用产生，可能是由于栈管理出现问题导致，暂记下，未深层追究原因。&lt;/p&gt;
+
+    &lt;p&gt;​&lt;/p&gt;
+
+    &lt;p&gt;&lt;em&gt;解决方式：&lt;/em&gt;&lt;/p&gt;
+
+    &lt;p&gt;不使用Fragment，换用自定义ViewGroup继承JCVideoPlayerStandard的方式或者完全	自定义VidewGroup进行视频播放展示，截止到目前一切正常。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sat, 17 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/06/17/%E8%AE%B0%E5%BD%95%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%92%8C%E4%B8%80%E4%B8%AAbug/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/06/17/%E8%AE%B0%E5%BD%95%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%92%8C%E4%B8%80%E4%B8%AAbug/</guid>
+        
+        <category>Bug</category>
+        
+        <category>内存泄漏</category>
+        
+        <category>AudioManager</category>
+        
+        <category>jiecaovideo</category>
+        
+        
+      </item>
     
       <item>
         <title>GitFlow工作流</title>

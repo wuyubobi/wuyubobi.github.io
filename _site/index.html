@@ -180,6 +180,38 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2017/06/17/%E8%AE%B0%E5%BD%95%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%92%8C%E4%B8%80%E4%B8%AAbug/">
+        <h2 class="post-title">
+            记项目上的两个内存泄漏修复
+        </h2>
+        
+        <h3 class="post-subtitle">
+            项目Bug随手记录
+        </h3>
+        
+        <div class="post-content-preview">
+            项目上需要视频播放功能，项目周期很短，接入了很多现成的库，发现几处Bug，记录一下解决方式。
+
+  
+    内存泄漏（TextureView）
+
+    
+Activity中使用jiecao播放器时，产生了如图所示的内存泄漏。
+
+    ​
+
+    解决方式：
+
+    在调用JCVideoPlayer.releaseAllVideos();之前将JCMediaManager.textu...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by ZhangBo on June 17, 2017
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2017/06/15/Git%E5%B7%A5%E4%BD%9C%E6%B5%81/">
         <h2 class="post-title">
             GitFlow工作流
@@ -349,6 +381,30 @@ GitFlow的工作方式
                             
                                 <a href="/tags/#代码管理" title="代码管理" rel="1">
                                     代码管理
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#Bug" title="Bug" rel="1">
+                                    Bug
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#内存泄漏" title="内存泄漏" rel="1">
+                                    内存泄漏
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#AudioManager" title="AudioManager" rel="1">
+                                    AudioManager
+                                </a>
+                            
+                        
+                            
+                                <a href="/tags/#jiecaovideo" title="jiecaovideo" rel="1">
+                                    jiecaovideo
                                 </a>
                             
                         
