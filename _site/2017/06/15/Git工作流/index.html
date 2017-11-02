@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Android开发 | wuyubobi，Android工程师，开发，数据，Java，旅游| 这里是 @wuyubobi 的个人博客，努力成为一个大牛。">
+    <meta name="keywords"  content="Android, 开发, wuyubobi, 张博的博客, 个人网站, 互联网, 前端, Java">
+    <meta name="theme-color" content="#000000">
+    
+    <title>GitFlow工作流 - 张博的博客 | ZB Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2017/06/15/Git%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">ZB Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/archives/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-digital-native.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/post-bg-digital-native.jpg')
+    }
+
+    
+</style>
+<header class="intro-header" >
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Git" title="Git">Git</a>
+                        
+                        <a class="tag" href="/tags/#GitFlow" title="GitFlow">GitFlow</a>
+                        
+                        <a class="tag" href="/tags/#项目管理" title="项目管理">项目管理</a>
+                        
+                        <a class="tag" href="/tags/#代码管理" title="代码管理">代码管理</a>
+                        
+                    </div>
+                    <h1>GitFlow工作流</h1>
+                    
+                    
+                    <h2 class="subheading">一个健壮的用于管理大型项目的框架</h2>
+                    
+                    <span class="meta">Posted by ZhangBo on June 15, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h3 id="git-flow-的安装">Git Flow 的安装</h3>
+<ul>
+  <li>OSX  —&gt;  brew install git-flow</li>
+  <li>Linux —&gt; apt-get install git-flow</li>
+  <li>Windows —&gt; <a href="https://github.com/nvie/gitflow/wiki/Windows">Window安装Git Flow</a></li>
+</ul>
+
+<p><em>Git Flow的使用方式</em></p>
+
+<p><img src="http://op0s30etn.bkt.clouddn.com/o_git-flow-commands.png" alt="" /></p>
+<h3 id="gitflow的工作方式">GitFlow的工作方式</h3>
+
+<p><img src="http://op0s30etn.bkt.clouddn.com/git-workflow-release-cycle-4maintenance.png" alt="" /></p>
+
+<ol>
+  <li><strong>Feature分支</strong> 
+功能分支，每一个新功能都位与一个独立分支，功能分支是使用develop分支作为父分支，新功能完成时，合并会develop分支，不予master分支交互。</li>
+  <li><strong>Master分支</strong> 
+这个分支最近发布到生产环境的代码，最近发布的Release， 这个分支只能从其他分支合并，不能在这个分支直接修改。</li>
+  <li><strong>Develop分支</strong> 
+这个分支是我们是我们的主开发分支，包含所有要发布到下一个Release的代码，这个主要合并与其他分支，比如Feature分支</li>
+  <li><strong>Release分支</strong>
+当你需要一个发布一个新Release的时候，我们基于Develop分支创建一个Release分支，完成Release后，我们合并到Master和Develop分支。</li>
+  <li><strong>Hotfix分支</strong>
+当我们在Master发现新的Bug时候，我们需要创建一个Hotfix, 完成Hotfix后，我们合并回Master和Develop分支，所以Hotfix的改动会进入下一个Release</li>
+</ol>
+
+<hr />
+
+<p><em>创建develop分支：</em></p>
+<ul>
+  <li>git branch develop （创建分支）</li>
+  <li>git push -u origin develop （将分支提交到远程仓库）</li>
+  <li>git clone …(仓库地址)</li>
+  <li>git checkout -b develop origin/develop （切换到develop分支）</li>
+</ul>
+
+<hr />
+
+<p><em>开发新功能</em></p>
+<ul>
+  <li>git checkout -b some-feature（新功能分支名） develop (基于develop分支创建并切换到该分支）</li>
+  <li>git status （查看变化）</li>
+  <li>git add .  （添加）</li>
+  <li>git commit -m ‘’  （提交）</li>
+</ul>
+
+<blockquote>
+  <p>git flow feature（默认创建的新功能分支名）start  some-feature（新功能分支名）使用git flow 快速完成操作
+git flow feature publish some-feature 推到远端服务器
+git flow feature pull origin some-feature 取到其他客户发布的新特性分支</p>
+</blockquote>
+
+<hr />
+
+<p><em>完成新功能</em></p>
+<ul>
+  <li>git pull origin develop （拉远程develop代码）</li>
+  <li>git checkout develop  （切换到develop分支）</li>
+  <li>git merge some-feature （将新功能和develop分支进行合并）</li>
+  <li>git push（提交到远程服务器）</li>
+  <li>git branch -d some-feature （删掉了新工能的分支）</li>
+</ul>
+
+<blockquote>
+  <p>git flow feature finish some-feature</p>
+</blockquote>
+
+<hr />
+
+<p><em>准备发布</em></p>
+<ul>
+  <li>git checkout -b release-v1.0.0（准备发布的版本） develop</li>
+  <li>git flow release start  release-v1.0.0 （从develop分支中开始创建master）</li>
+</ul>
+
+<blockquote>
+  <p>git flow release publish release-v1.0.0 （推到远端服务器）</p>
+</blockquote>
+
+<hr />
+
+<p><em>完成release版本</em></p>
+<ul>
+  <li>git checkout master （切换分支）</li>
+  <li>git merge release-v1.0.0 （合并发布的release-v1.0.0版本）</li>
+  <li>git push （提交远端）</li>
+  <li>git checkout develop （切换develop分支）</li>
+  <li>git merge release-v1.0.0（合并发布的release-v1.0.0版本）</li>
+  <li>git push （提交远端）</li>
+  <li>git branch -d release-v1.0.0 （删除release分支）</li>
+  <li>git tag -a v1.0.0 -m “” master （打tag）</li>
+  <li>git push –tags （提交tag）</li>
+</ul>
+
+<blockquote>
+  <p>git flow release finish release-v1.0.0</p>
+</blockquote>
+
+<hr />
+
+<p><em>修复线上bug</em></p>
+<ul>
+  <li>git checkout -b issue-#001 master （基于master创建修复分支）</li>
+  <li>Fix the bug （修复bug）</li>
+  <li>git checkout master （切换master分支）</li>
+  <li>git merge issue-#001 （合并修复）</li>
+  <li>git push （提交）</li>
+  <li>git checkout develop （切换develop分支）</li>
+  <li>git merge issue-#001 （合并修复）</li>
+  <li>git push （提交）</li>
+  <li>git branch -d issue-#001 （删除修复分支）</li>
+</ul>
+
+<blockquote>
+  <p>git flow hotfix start VERSION [BASENAME] VERSION 参数标记着修正版本。你可以从 [BASENAME]开始，[BASENAME]为finish release时填写的版本号
+git flow hotfix finish VERSION</p>
+</blockquote>
+
+
+<!-- zanshang -->
+<div>
+
+      
+</div>
+
+        <div>
+     
+	  <!-- <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;"> -->
+      <div style="border-radius: 15px;text-align: center;">
+	    <p style="margin-bottom: 15px">如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作！</p>
+
+	    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&#39;QR&#39;); 
+                if (qr.style.display === &#39;none&#39;) {qr.style.display=&#39;block&#39;;} else {qr.style.display=&#39;none&#39;}">
+	      <span>赞赏</span>
+	    </button>
+	    <div id="QR" style="display: none;">
+	      
+	        <div id="wechat" style="display: inline-block">
+	          <a href="/img/wechat.jpg" class="fancybox" rel="group"><img id="wechat_qr" src="/img/wechat.jpg" alt="WeChat Pay"></a>
+	          <p>微信打赏</p>
+	        </div>
+	      
+	      
+          </div>
+  </div>
+  
+
+
+      
+    </div>
+                <hr>
+
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/01/%E6%80%9D%E7%BB%B4%E7%AC%94%E8%AE%B0/" data-toggle="tooltip" data-placement="top" title="思考的笔记">
+                        Previous<br>
+                        <span>思考的笔记</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/06/17/%E8%AE%B0%E5%BD%95%E9%A1%B9%E7%9B%AE%E4%B8%8A%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%92%8C%E4%B8%80%E4%B8%AAbug/" data-toggle="tooltip" data-placement="top" title="记项目上的两个内存泄漏修复">
+                        Next<br>
+                        <span>记项目上的两个内存泄漏修复</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+
+                
+
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+                				<a href="/tags/#转载" title="转载" rel="1">
+                                    转载
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#管理" title="管理" rel="1">
+                                    管理
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#思考" title="思考" rel="1">
+                                    思考
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#职场" title="职场" rel="1">
+                                    职场
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#未来" title="未来" rel="1">
+                                    未来
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#Git" title="Git" rel="1">
+                                    Git
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#GitFlow" title="GitFlow" rel="1">
+                                    GitFlow
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#项目管理" title="项目管理" rel="1">
+                                    项目管理
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#代码管理" title="代码管理" rel="1">
+                                    代码管理
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#Bug" title="Bug" rel="1">
+                                    Bug
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#内存泄漏" title="内存泄漏" rel="1">
+                                    内存泄漏
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#AudioManager" title="AudioManager" rel="1">
+                                    AudioManager
+                                </a>
+                            
+        				
+                            
+                				<a href="/tags/#jiecaovideo" title="jiecaovideo" rel="1">
+                                    jiecaovideo
+                                </a>
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+ 					 <!--
+                    
+                    -->
+
+                    <!-- add lofter,ins by teng, add target = "_blank" to <a> by Hux -->
+                    
+                    
+                    
+
+                     
+
+                     <!-- add lofter,ins by teng, add target = "_blank" to <a> by Hux -->
+                    
+
+                       
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/wuyubobi">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    
+                    
+
+                  </ul>
+                  <p class="copyright text-muted">
+                      Copyright &copy; ZB Blog 2017
+                      <br>
+                      Write by <a href="http://weibo.com/wuyubobi">wuyubobi</a> | 努力成为大牛
+
+                  </p>
+              </div>
+          </div>
+      </div>
+
+
+  </footer>
+  <!-- jQuery -->
+  <script src="/js/jquery.min.js "></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="/js/bootstrap.min.js "></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="/js/hux-blog.min.js "></script>
+
+
+  <!-- async load function -->
+  <script>
+      function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+      }
+  </script>
+
+  <!--
+       Because of the native support for backtick-style fenced code blocks
+       right within the Markdown is landed in Github Pages,
+       From V1.6, There is no need for Highlight.js,
+       so Huxblog drops it officially.
+       - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+       - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+       - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+  -->
+  <!--
+      <script>
+          async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+              hljs.initHighlightingOnLoad();
+          })
+      </script>
+      <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+  -->
+
+
+  <!-- jquery.tagcloud.js -->
+  <script>
+      // only load tagcloud.js in tag.html
+      if($('#tag_cloud').length !== 0){
+          async('/js/jquery.tagcloud.js',function(){
+              $.fn.tagcloud.defaults = {
+                  //size: {start: 1, end: 1, unit: 'em'},
+                  color: {start: '#bbbbee', end: '#0085a1'},
+              };
+              $('#tag_cloud a').tagcloud();
+          })
+      }
+  </script>
+
+  <!--fastClick.js -->
+  <script>
+      async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+          var $nav = document.querySelector("nav");
+          if($nav) FastClick.attach($nav);
+      })
+  </script>
+
+
+  <!-- Google Analytics -->
+  
+
+
+  <!-- Baidu Tongji -->
+  
+
+
+
+  <!-- Side Catalog -->
+  
+  <script type="text/javascript">
+      function generateCatalog (selector) {
+          var P = $('div.post-container'),a,n,t,l,i,c;
+          a = P.find('h1,h2,h3,h4,h5,h6');
+          a.each(function () {
+              n = $(this).prop('tagName').toLowerCase();
+              i = "#"+$(this).prop('id');
+              t = $(this).text();
+              c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+              l = $('<li class="'+n+'_nav"></li>').append(c);
+              $(selector).append(l);
+          });
+          return true;
+      }
+      generateCatalog(".catalog-body");
+      // toggle side catalog
+      $(".catalog-toggle").click((function(e){
+          e.preventDefault();
+          $('.side-catalog').toggleClass("fold")
+      }))
+      /*
+       * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+       * Fork by Hux to support padding
+       */
+      async("/js/jquery.nav.js", function () {
+          $('.catalog-body').onePageNav({
+              currentClass: "active",
+              changeHash: !1,
+              easing: "swing",
+              filter: "",
+              scrollSpeed: 700,
+              scrollOffset: 0,
+              scrollThreshold: .2,
+              begin: null,
+              end: null,
+              scrollChange: null,
+              padding: 80
+          });
+      });
+  </script>
+  
+
+  <!-- Highlight.js -->
+  <script>
+      async("//cdn.bootcss.com/highlight.js/9.4.0/highlight.min.js",function(){
+          hljs.initHighlightingOnLoad();
+      })
+  </script>
+
+<link href="//cdn.bootcss.com/highlight.js/9.4.0/styles/github.min.css" rel="stylesheet">
+
+
+
+  <!-- search -->
+<div class="search-tool" style="position: fixed; top: 0px ; bottom: 0px; left: 0px; right:  0px;
+      opacity: 0.95; background-color: #111111; z-index: 9999; display: none;">
+    <input type="text" class="form-control search-content" id="search-content" style="position: fixed; top: 60px"
+           placeholder="文章标题 日期 标签"
+           >
+
+    <div style="position: fixed; top: 16px; right: 16px;">
+        <img src="/search/img/cb-close.png"  id="close-btn"/>
+    </div>
+</div>
+
+<div style="position: fixed; right: 16px; bottom: 20px;">
+    <img src="/search/img/cb-search.png"  id="search-btn"  title="双击ctrl试一下"/>
+</div>
+
+<link rel="stylesheet" href="/search/css/cb-search.css">
+
+<script src="/search/js/bootstrap3-typeahead.min.js"></script>
+<script src="/search/js/cb-search.js"></script>
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
