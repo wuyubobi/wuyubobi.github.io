@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      “Python爬虫学习-第一个爬虫”
-subtitle:   “Python 学习历程”
+title:      Python爬虫学习-第一个爬虫
+subtitle:   Python 学习历程
 date:       2017-10-17
 author:     "ZhangBo"
 header-img: "img/post-bg-unix-linux.jpg"
