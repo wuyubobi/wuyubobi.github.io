@@ -1,10 +1,10 @@
 ---
 layout:     post
-title:      Python爬虫学习-Mac 安装 Scrapy
+title:      Python爬虫学习-Mac安装Scrapy
 subtitle:   Python 学习历程
 date:       2017-10-18
 author:     "ZhangBo"
-header-img: "img/post-bg-gongju.jpg”
+header-img: "img/post-bg-gongju.jpg"
 catalog: true
 tags:
 - 爬虫
