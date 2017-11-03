@@ -36,8 +36,9 @@ tags:
 	- `./install.py --clang-completer` 在YouCompleteMe下执行, 时间较长 有 C 语言的提醒, 期间如果提示缺少什么就使用 apt-get 安装什么
 4. YouCompleteMe的配置信息
 	- 配置在`~/.vimrc`中
-	- [详细配置]()(http://op0s30etn.bkt.clouddn.com/Ubuntu_YCM.txt) 
+	- [详细配置信息][1]
 5. 其他插件推荐
 	- delimitMate：括号补全
 	- indentLine：显示缩进对齐
 
+[1]:	http://op0s30etn.bkt.clouddn.com/Ubuntu_YCM.txt
