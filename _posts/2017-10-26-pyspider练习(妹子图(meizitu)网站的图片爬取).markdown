@@ -30,14 +30,14 @@ tags:
 	- 启动成功后 访问 localhost:5000可以看到 pyspider的主页面
 	- 点击右侧的 Create创建一个项目 此时你已成功的创建了一个 pyspider 的项目
 3. 对目标页面进行分析
-	- [妹子图]() 首页有大图 点击第二页以后 url 变为 http://www.meizitu.com/a/more\_1.html 首页的图片也存在与第二页 那么意味着我们从第二页开始爬取即可爬到整站的图片
+	- [妹子图][1] 首页有大图 点击第二页以后 url 变为 http://www.meizitu.com/a/more\_1.html 首页的图片也存在与第二页 那么意味着我们从第二页开始爬取即可爬到整站的图片
 	- 通过点击第二页 第三页发现 url 的变化仅为 more后面的数值发生变化
 	- 提取目标的 url 通过 Chrome 浏览器审查元素可发现每一组的 url 位于 li \> div \> .pic \> a 标签的 href 属性中
 	- 进入详情页 目标图片 位于 #picture \> p \> img 的 src 属性 图片的名字 为 alt 属性
 	- 网页的名字 h2 \> a 的 text() 方法取出
 	- 由于妹子图的图片有防盗链机制, 当我们点击图片的时候发现Referer : http://www.meizitu.com/a/5585.html 后面的对应图片所在的详情页 (Referer 在请求头中表示此图片来源于哪) 所以我们在下载图片的时候需要在请求头中加入 Referer 
 4. 开始撸码
-	-  [具体代码]()
+	-  [具体代码][2]
 5. 成果
 	![][image-1]
 
@@ -55,5 +55,8 @@ tags:
 
 
 
+
+[1]:	http://www.meizitu.com
+[2]:	http://op0s30etn.bkt.clouddn.com/MeiZiTuSpider.py
 
 [image-1]:	http://op0s30etn.bkt.clouddn.com/meizitu.jpg
