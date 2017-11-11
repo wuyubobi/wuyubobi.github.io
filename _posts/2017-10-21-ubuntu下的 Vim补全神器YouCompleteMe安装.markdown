@@ -13,7 +13,7 @@ tags:
 ---
 ### Vim 自动补全工具的安装
 
-##### Ubuntu 安装 YouCompleteMe
+#### Ubuntu 安装 YouCompleteMe
 
 基于 Ubuntu16.04版本
 

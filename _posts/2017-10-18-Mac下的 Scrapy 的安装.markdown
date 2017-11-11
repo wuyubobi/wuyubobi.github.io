@@ -13,7 +13,7 @@ tags:
 ---
 ### Python爬虫学习
 
-##### Mac 安装 Scrapy
+#### Mac 安装 Scrapy
 
 基于 python2.7版本
 
@@ -37,7 +37,8 @@ tags:
 6. 安装 Scrapy
 	- sudo -H pip install Scrapy
 	- scrapy version 如果返回 Scrapy 对应的版本既安装成功
-##### 遇到的问题
+
+#### 遇到的问题
 
 1. Operation not permitted:
 	- 这里分两种情况
