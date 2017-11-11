@@ -39,7 +39,7 @@ tags:
 4. 开始撸码
 	-  [具体代码]()
 5. 成果
-	![]()
+	![][image-1]
 
 #### 遇到的问题
 
@@ -52,3 +52,8 @@ tags:
 
 
 
+
+
+
+
+[image-1]:	http://op0s30etn.bkt.clouddn.com/meizitu.jpg
